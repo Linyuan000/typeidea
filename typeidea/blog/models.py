@@ -14,7 +14,7 @@ class Category(models.Model):
     status = models.PositiveIntegerField(default=STATUS_NORMAL,
     choices=STATUS_ITEMS, verbose_name='状态')
     is_nav = models.BooleanField(default=False, verbose_name='是否为导航')
-    owner = models.ForeignKey(User, verbose_name='作者') #应该是用户?
+    owner = models.ForeignKey(User, verbose_name='作者') 
     created_time = models.DateTimeField(auto_now_add=True, verbose_name='创建时间')
 
     def __str__(self): #如果不修改, Post的fields展示这个字段的时候会显示object对象
