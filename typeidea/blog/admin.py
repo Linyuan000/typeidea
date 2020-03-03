@@ -7,7 +7,7 @@ from .models import Post, Category, Tag
 from .adminforms import PostadminForm
 from typeidea.base_admin import BaseOwnerAdmin
 from typeidea.custom_site import custom_site
-# Register your models here.
+
 
 
 # class PostInline(admin.TabularInline): #StackedInline样式不同 
