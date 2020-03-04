@@ -27,7 +27,7 @@ class CategoryAdmin(BaseOwnerAdmin):
     #     return super().save_model(request, obj, form, change) #python2的写法 super(CategoryAdmin, self)
     
     def post_count(self, obj):
-        return obj.post_set.count() #查看一下post_set的用法
+        return obj.post_set.count() #通过分类反向查询文章数量
     
     post_count.short_description = '文章数量'
 
