@@ -93,7 +93,7 @@ class Post(models.Model):
             post_list = []
         else:
             post_list = tag.post_set.filter(status=Post.STATUS_NORMAL).select_related('owner', 'category')
-            # 返回一个带有外键关系的QuerySet,以后使用外键关系不需要再次做数据库查询
+            # 返回带有外键关系的QuerySet,以后使用外键关系不需要再次做数据库查询
         return post_list, tag
     
     @staticmethod
