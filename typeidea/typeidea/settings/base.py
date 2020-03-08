@@ -56,11 +56,13 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'typeidea.urls'
 
+THEME = 'bootstrap' #如需要构建新的主题,只需要修改THEME
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
-        'APP_DIRS': True,
+        'DIRS': [os.path.join(BASE_DIR, 'themes', THEME, 'templates')], 
+        'APP_DIRS': True, #找不到的情况回去各个app下找
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
