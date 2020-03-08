@@ -1,0 +1,10 @@
+<ul>
+{% for comment in comments %}
+    <li>
+        <!-- <a href="/post/{{ comment.target_id }}.html">{{ comment.target.title }}</a> -->
+        <!-- 不设外键没法显示文章名字 -->
+        {{ comment.nickname }} : {{ comment.content }}
+        <a href="{{ comment.target }}">文章详情</a> 
+    </li>
+{% endfor %}
+</ul>
