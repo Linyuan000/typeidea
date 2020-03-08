@@ -1,3 +1,4 @@
+from django.db.models import Q
 from django.shortcuts import render
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponse
@@ -5,7 +6,8 @@ from django.views.generic import ListView, DetailView
 
 from .models import Post, Tag, Category
 from config.models import SideBar
-
+from comment.forms import CommentForm
+from comment.models import Comment
 # Create your views here.
 # def post_list(request, category_id=None, tag_id=None):
 #     tag = None
@@ -108,15 +110,47 @@ class TagView(IndexView): #同上
     def get_queryset(self):
         queryset = super().get_queryset()
         tag_id = self.kwargs.get('tag_id')
-        return queryset.filter(tag_id=tag_id)
+        return queryset.filter(tag__id=tag_id) #多表查询双下划线,在post里面查tag的id为tag_id的文章
 
 
 class PostDetailView(CommonViewMixin, DetailView): #DetailView只获取一条数据
     queryset = Post.latest_posts()
     template_name = 'blog/detail.html'
     context_object_name = 'post'
-    pk_url_kwarg = 'post_id' #这一项是干嘛用的?为什么可以不用self.kwargs?
+    pk_url_kwarg = 'post_id' #这一项是干嘛用的?为什么ListView可以不用定义?
+    # Generic detail view PostDetailView must be called with either an object pk or a slug.
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update({
+            'comment_form': CommentForm,
+            'comment_list': Comment.get_by_target(self.request.path),
+        }) 
+        return context
+    
+ 
+
+class SearchView(IndexView): #不用区分get和post方法吗?默认是get方法?
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update({
+            'keyword': self.request.GET.get('keyword', '') #提供缺省返回值''
+        })
+        return context
+    
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        keyword = self.request.GET.get('keyword')
+        if not keyword:
+            return queryset
+        return queryset.filter(Q(title__icontains=keyword) | Q(desc__icontains=keyword))
+
+
+class AuthorView(IndexView):
+    def get_queryset(self):
+        queryset =  super().get_queryset()
+        author_id = self.kwargs.get('owner_id')
+        return queryset.filter(owner_id=author_id)
     
     
     
